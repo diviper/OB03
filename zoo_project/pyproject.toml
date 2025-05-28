@@ -1,0 +1,103 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "zoo_project"
+version = "0.1.0"
+description = "Система управления зоопарком"
+readme = "README.md"
+requires-python = ">=3.12"
+license = {text = "MIT"}
+authors = [
+    {name = "Ваше имя", email = "ваш.email@example.com"},
+]
+classifiers = [
+    "Programming Language :: Python :: 3.12",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "typer[all]>=0.9.0",
+    "rich>=13.0.0",
+    "pydantic>=2.0.0",
+    "python-dateutil>=2.8.2",
+    "pyyaml>=6.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "pytest-asyncio>=0.21.0",
+    "mypy>=1.0.0",
+    "ruff>=0.0.280",
+    "black>=23.0.0",
+    "isort>=5.12.0",
+    "freezegun>=1.2.0",
+]
+
+[project.scripts]
+zoo = "zoo.cli:app"
+
+[tool.black]
+line-length = 100
+target-version = ['py312']
+include = '\.pyi?$'
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+select = ["E", "F", "I", "N", "W", "B", "C4", "B", "A", "COM", "C90", "I", "N", "Q", "RSE", "S", "T10", "T20", "TCH", "TID"]
+ignore = [
+    "E501",  # Line too long - handled by black
+    "E203",  # Whitespace before ':' - handled by black
+]
+
+[tool.ruff.per-file-ignores]
+"__init__.py" = ["F401"]  # Unused imports in __init__ files are fine
+"tests/*" = ["S101"]  # Allow assert in tests
+
+[tool.mypy]
+python_version = "3.12"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+
+[[tool.mypy.overrides]]
+module = ["typer*"]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = ["rich*"]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+python_functions = "test_*"
+python_classes = "Test*"
+addopts = "-v --cov=zoo --cov-report=term-missing"
+asyncio_mode = "auto"
+
+[tool.coverage.run]
+source = ["zoo"]
+include = ["zoo/*.py"]
+omit = ["zoo/__init__.py"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+
+[project.urls]
+Homepage = "https://github.com/yourusername/zoo_project"
+Bug Tracker = "https://github.com/yourusername/zoo_project/issues"
